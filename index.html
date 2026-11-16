@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0b1728"/>
+  <meta name="description" content="Interactive graph-search laboratory: compare A*, Dijkstra and BFS while building weighted robot navigation fields."/>
+  <title>RoverRoute | Robot Path Planning Studio</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="ambient"></div>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="RoverRoute home"><span class="brand-mark">⌁</span><span>ROVER<span class="brand-emphasis">ROUTE</span><small>PATH PLANNING STUDIO</small></span></a>
+      <div class="right-top"><span class="status-dot"></span><span>LOCAL SIMULATION</span><span class="version">v1.0</span></div>
+    </header>
+    <div class="heading-row">
+      <div><p class="eyebrow">ROBOTICS / ALGORITHMS / EXPLORATION</p><h1>Find the better <em>route.</em></h1><p class="subtitle">Sketch a terrain map, simulate a robot, and see how search algorithms make decisions in real time.</p></div>
+      <div class="intro-badge"><span class="intro-icon">◈</span><span>3 SEARCH ENGINES<strong>1 INTERACTIVE FIELD</strong></span></div>
+    </div>
+    <main class="workspace">
+      <aside class="control-panel panel">
+        <div class="panel-title"><span class="section-number">01</span><h2>Mission control</h2></div>
+        <label for="algorithm" class="field-label">SEARCH STRATEGY</label>
+        <select id="algorithm" class="select"><option value="astar">A* — cost-aware & guided</option><option value="dijkstra">Dijkstra — lowest cost</option><option value="bfs">BFS — shortest steps</option></select>
+        <div class="separator"></div>
+        <p class="field-label">TERRAIN BRUSH</p>
+        <div class="brushes" role="group" aria-label="Terrain drawing mode">
+          <button class="brush selected" data-brush="wall" aria-pressed="true"><span class="swatch sw-wall"></span>Wall</button>
+          <button class="brush" data-brush="erase" aria-pressed="false"><span class="swatch sw-plain"></span>Clear</button>
+          <button class="brush" data-brush="sand" aria-pressed="false"><span class="swatch sw-sand"></span>Sand</button>
+          <button class="brush" data-brush="rough" aria-pressed="false"><span class="swatch sw-rough"></span>Rough</button>
+          <button class="brush" data-brush="start" aria-pressed="false"><span class="swatch sw-start"></span>Start</button>
+          <button class="brush" data-brush="goal" aria-pressed="false"><span class="swatch sw-goal"></span>Goal</button>
+        </div>
+        <p class="field-help">Click or drag to paint. Move start and goal using their brushes.</p>
+        <div class="separator"></div>
+        <div class="range-title"><label for="speed" class="field-label">ANIMATION SPEED</label><span id="speed-label">Fast</span></div>
+        <input id="speed" type="range" min="1" max="5" value="4" step="1"/>
+        <button id="run" class="btn btn-primary"><span>▶</span> Run simulation</button>
+        <button id="compare" class="btn btn-outline"><span>▤</span> Compare all algorithms</button>
+        <div class="separator"></div>
+        <p class="field-label">FIELD OPERATIONS</p>
+        <div class="actions-grid"><button id="sample" class="btn btn-mini">Demo map</button><button id="random" class="btn btn-mini">Random map</button><button id="clear" class="btn btn-mini">Clear all</button><button id="export" class="btn btn-mini">Export JSON</button></div>
+        <label for="file" class="import-link">↥ Import saved map</label><input id="file" class="visually-hidden" type="file" accept=".json,application/json"/>
+      </aside>
+      <section class="board-panel panel">
+        <div class="board-top"><div><span class="field-label">ROBOTICS TEST FIELD</span><h2>Navigation grid <span class="grid-dim">24 × 16</span></h2></div><div class="board-status"><span id="status-pulse" class="status-dot"></span><span id="run-status" role="status" aria-live="polite">Ready to simulate</span></div></div>
+        <div class="board-scroll"><div id="board" class="board" role="grid" aria-label="Editable robot navigation field"></div></div>
+        <div class="board-foot"><div class="legend"><span><i class="lg-start"></i>Start</span><span><i class="lg-goal"></i>Goal</span><span><i class="lg-wall"></i>Wall</span><span><i class="lg-sand"></i>Sand · 3×</span><span><i class="lg-rough"></i>Rough · 6×</span><span><i class="lg-explored"></i>Explored</span><span><i class="lg-path"></i>Route</span></div><div class="foot-note">4-way movement · No diagonals</div></div>
+        <div class="bottom-insight"><span class="insight-icon">i</span><p><strong>Think like a navigation engineer.</strong> BFS optimizes number of moves, not terrain cost. A* and Dijkstra optimize total traversal cost when costs are nonnegative.</p></div>
+      </section>
+      <aside class="metrics-panel panel">
+        <div class="panel-title"><span class="section-number">02</span><h2>Telemetry</h2></div>
+        <div class="metric"><p>ROUTE COST</p><strong id="metric-cost">—</strong><span>weighted travel units</span></div>
+        <div class="metric"><p>ROUTE LENGTH</p><strong id="metric-steps">—</strong><span>grid steps</span></div>
+        <div class="metric"><p>NODES EXPLORED</p><strong id="metric-expanded">—</strong><span>expanded search cells</span></div>
+        <div class="metric"><p>SEARCH DURATION</p><strong id="metric-duration">—</strong><span>milliseconds · local browser</span></div>
+        <div class="metric"><p>MAX FRONTIER</p><strong id="metric-frontier">—</strong><span>queued search states</span></div>
+        <div id="metric-note" class="metric-note">Run a simulation to populate real results.</div>
+      </aside>
+    </main>
+    <section class="compare-panel panel" id="compare-panel"><div class="compare-head"><div><p class="eyebrow">BENCHMARK</p><h2>Algorithm comparison</h2></div><span>Computed on your current field</span></div><div class="compare-rows" id="comparison"><p class="empty-compare">Select “Compare all algorithms” to see route efficiency side by side.</p></div></section>
+    <footer class="footer"><span>ROVERROUTE — INDEPENDENT PORTFOLIO DEMO</span><span>Pure JavaScript · A* / Dijkstra / BFS · Browser visualization</span></footer>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
